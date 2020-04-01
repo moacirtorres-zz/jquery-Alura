@@ -7,6 +7,7 @@ $(document).ready(function(){
 	inicializaContadores()
 	inicializaCronometro()
 	$("#reiniciar-jogo").on("click", reiniciaJogo)
+	inicializarMarcadores()
 })
 
 function atualizaTamanhoFrase() {
@@ -57,6 +58,8 @@ function inicializaCronometro() {
 			campo.attr("disabled", true)
 			clearInterval(cronometroID)
 			$("#reiniciar-jogo").attr("disabled", false);
+			campo.css("background-color", "lightgray")
+			campo.css("border", "3px solid black")
 		}
 	}, 1000)
 
@@ -77,10 +80,29 @@ function reiniciaJogo() {
 	$("#contador-palavras").text("0")
 	$("#contador-caracteres").text("0")
 	$("#tempo-digitacao").text(tempoInicial)
+	campo.css("background-color", "white")
 	inicializaCronometro()
 	
 }
 
+// Verificando digitação
+
+
+function inicializarMarcadores() {
+
+var frase = $(".frase").text()
+
+campo.on("input", function() {
+	var digitado = campo.val()
+	var comparavel = frase.substr(0, digitado.length)
+	if (digitado == comparavel) {
+		campo.css("border", "3px solid blue")
+	} else {
+		campo.css("border", "3px solid red")
+		}
+
+	})
+}
 
 
 
