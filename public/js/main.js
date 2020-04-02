@@ -1,5 +1,6 @@
 var tempoInicial = $("#tempo-digitacao").text()
 var campo = $(".campo-digitacao")
+$('.botao-placar').click(mostraPlacar)
 
 
 
@@ -9,6 +10,12 @@ $(document).ready(function(){
 	inicializaCronometro()
 	$("#reiniciar-jogo").on("click", reiniciaJogo)
 	inicializarMarcadores()
+	atualizaPlacar()
+	$("#usuarios").selectize({
+    create: true,
+    sortField: 'text'
+});
+
 })
 
 function atualizaTamanhoFrase() {
@@ -47,11 +54,12 @@ function inicializaContadores() {
 
 function inicializaCronometro() {
 
-	var tempoRestante = $("#tempo-digitacao").text()
+	
 	campo.one("focus", function() {
 	$("#reiniciar-jogo").attr("disabled",true)	
 
 	var cronometroID = setInterval(function(){
+		var tempoRestante = $("#tempo-digitacao").text()
 
 		tempoRestante--
 		$("#tempo-digitacao").text(tempoRestante)
@@ -113,18 +121,24 @@ campo.on("input", function() {
 function inserePlacar() {
 	var tabela = $(".placar").find("table")
 	var corpoTabela = $(".placar").find("tbody")
-	var usuario = "Moacir"
+	var usuario = $("#usuarios").val()
 	var numPalavras = $("#contador-palavras").text()
 	var linha = novaLinha(usuario, numPalavras)
 	linha.find(".botao-remover").click(removeLinha)
 	corpoTabela.prepend(linha)
+	$(".placar").slideDown(500)
+	scrollPlacar()
+}
+
+function atualizaTempoInicial(tempo) {
+	$("#tempo-digitacao").text(tempo)
 }
 
 function removeLinha() {
 
 $(".botao-remover").click(function(event) {
 			event.preventDefault()
-			$(this).parent().parent().remove() 
+			$(this).parent().parent().fadeOut() 
 	})
 }
 
@@ -144,4 +158,21 @@ function novaLinha(usuario, numPalavras) {
 	console.log(linha)
 
 	return linha
+}
+
+
+// Mostrando placar
+
+
+
+function mostraPlacar() {
+	$(".placar").slideToggle(600)
+}
+
+function scrollPlacar() {
+	var posicaoPlacar = $(".placar").offset().tóp
+	$("body").animate(
+	{
+		scrollTop: "100px"
+	}), 1000
 }
